@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Interactive | Illutions</title>
+  <link rel="icon" type="image/png" href="layout/favicon.png">
+  <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/license.css">
+</head>
+<body>
+  <ilu-canvas>
+    <a class="license" href="LICENSE_ASSETS.md" target="_blank">ASSET LICENSES</a>
+    <ilu-stepper>
+      <nav>
+        <ol></ol>
+      </nav>
+      <dl>
+        <div class="is-active" data-step="default">
+          <dt>JET ENGINE</dt>
+          <dd>A turbofan engine produces thrust by accelerating air through its core and bypass.</dd>
+        </div>
+        <div data-step="Obj1">
+          <dt>Fan</dt>
+          <dd>The fan draws in air and directs it into the engine core and bypass.</dd>
+        </div>
+        <div data-step="Obj2">
+          <dt>Compressor</dt>
+          <dd>The compressor raises the pressure of the air before combustion.</dd>
+        </div>
+        <div data-step="Obj3">
+          <dt>Shaft</dt>
+          <dd>The shaft transfers rotational energy from the turbine to the compressor and fan.</dd>
+        </div>
+        <div data-step="Obj4">
+          <dt>Combustion Chamber</dt>
+          <dd>The combustion chamber mixes compressed air with fuel and ignites it.</dd>
+        </div>
+        <div data-step="Obj5">
+          <dt>Turbine</dt>
+          <dd>The turbine extracts energy from the hot gases to drive the shaft.</dd>
+        </div>
+        <div data-step="Obj6">
+          <dt>Nozzle</dt>
+          <dd>The nozzle accelerates the exhaust flow and helps generate thrust.</dd>
+        </div>
+        <div data-step="Obj7">
+          <dt>Inner Fixed Structure</dt>
+          <dd>The inner fixed structure supports internal components and guides airflow through the engine.</dd>
+        </div>
+        <div data-step="Obj8">
+          <dt>Nacelle</dt>
+          <dd>The nacelle surrounds the engine and guides airflow around it.</dd>
+        </div>
+      </dl>
+    </ilu-stepper>
+  </ilu-canvas>
+  <script type="module" src="src/index.ts"></script>
+</body>
+</html>

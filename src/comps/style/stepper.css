@@ -1,0 +1,106 @@
+ilu-stepper {
+  z-index: 2;
+  position: fixed;
+  top: 75%; left: 50%;
+  display: grid;
+  width: min(32rem, calc(100vw - 3rem));
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  transform: translate(-50%, 0%);
+  user-select: none;
+}
+
+ilu-stepper nav {
+  grid-row: 2;
+  width: 100%;
+}
+
+ilu-stepper dl {
+  display: contents;
+  margin: 0;
+}
+
+ilu-stepper dl > div {
+  display: none;
+}
+
+ilu-stepper dl > div.is-active {
+  display: contents;
+}
+
+ilu-stepper dt {
+  grid-row: 1;
+  min-height: 1em;
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-shadow: 0 1px 4px #000;
+}
+
+ilu-stepper dd {
+  grid-row: 3;
+  min-height: 2.5rem;
+  box-sizing: border-box;
+  margin: 1rem 0 0;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  text-shadow: 0 1px 4px #000;
+}
+
+ilu-stepper ol {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--step-count), 1fr);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  isolation: isolate;
+}
+
+ilu-stepper li {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  cursor: default;
+}
+
+ilu-stepper li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background: #ffffffb3;
+  transform: translateY(-50%);
+}
+
+ilu-stepper li > span {
+  position: relative;
+  z-index: 1;
+  width: 0.825rem;
+  height: 0.825rem;
+  box-sizing: border-box;
+  background: #737373;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px #0009;
+  transition: background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+ilu-stepper li.is-active > span {
+  background: var(--active-color);
+  border-color: var(--active-color);
+  box-shadow: 0 0 0.375rem var(--active-color), 0 1px 4px #0009;
+  transform: scale(1.25);
+}
