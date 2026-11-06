@@ -1,12 +1,15 @@
 import { type AnyStateMachine, setup } from 'xstate';
-import type { App, ModelReadyEvent, Obj3DPointerEvent, SceneReadyEvent } from 'illutions';
 
-import { classes } from './classes';
+import type { ModelReadyEvent, Obj3DPointerEvent, SceneReadyEvent } from 'illutions';
+
+import type { MyApp } from './index';
+
 
 // Define synchronized 3D object and stepper interaction with a state machine
-export function createStateMachine(app: App<typeof classes>): AnyStateMachine {
-  const { comps, engine, orbitCtrls, raycast } = app;
-  const stepper = comps.Stepper[0];
+export const stm = (app: MyApp): AnyStateMachine => {
+  const { comps, orbitCtrls, materials } = app;
+  const { clip } = comps;
+  const stepper = comps.web.stepper[0];
 
   // Define the shared component highlight
   const emissiveColor = '#ff0040';
@@ -29,19 +32,7 @@ export function createStateMachine(app: App<typeof classes>): AnyStateMachine {
       enableOrbitCtrls: () => orbitCtrls.enable(),
 
       // Start rotation after the final model level has rendered
-      playRotation: () => engine.playClip({ layer: 'Engine', clip: 'Rotation', loopMode: 'infinite', endSpeed: 0.3 }),
-
-      // Use the hidden low-poly engine parts as pointer colliders
-      setColliders: () => raycast.setColliders([
-        { obj: 'FanLP', hide: true, pickable: true },
-        { obj: 'CompressorLP', hide: true, pickable: true },
-        { obj: 'ShaftLP', hide: true, pickable: true },
-        { obj: 'CombChambLP', hide: true, pickable: true },
-        { obj: 'TurbineLP', hide: true, pickable: true },
-        { obj: 'NozzleLP', hide: true, pickable: true },
-        { obj: 'IFSLP', hide: true, pickable: true },
-        { obj: 'NacelleLP', hide: true, pickable: true },
-      ]),
+      playRotation: () => clip.rotation.start({ layer: 'Engine', modeLoop: 'infinite', speedIn: { to: 0.3 } }),
 
       // Show the content for the active engine component
       setStepperObj1: () => stepper.setActiveStep('Obj1', emissiveColor),
@@ -54,35 +45,35 @@ export function createStateMachine(app: App<typeof classes>): AnyStateMachine {
       setStepperObj8: () => stepper.setActiveStep('Obj8', emissiveColor),
 
       // Highlight the active engine component
-      setMaterialObj1: () => engine.setMaterialProperties({ obj: 'Fan', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj2: () => engine.setMaterialProperties({ obj: 'Compressor', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj3: () => engine.setMaterialProperties({ obj: 'Shaft', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj4: () => engine.setMaterialProperties({ obj: 'CombChamb', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj5: () => engine.setMaterialProperties({ obj: 'Turbine', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj6: () => engine.setMaterialProperties({ obj: 'Nozzle', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj7: () => engine.setMaterialProperties({ obj: 'IFS', emissiveIntensity, emissive: emissiveColor }),
-      setMaterialObj8: () => engine.setMaterialProperties({ obj: 'Nacelle', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj1: () => materials.set({ name: 'Fan', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj2: () => materials.set({ name: 'Compressor', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj3: () => materials.set({ name: 'Shaft', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj4: () => materials.set({ name: 'CombChamb', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj5: () => materials.set({ name: 'Turbine', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj6: () => materials.set({ name: 'Nozzle', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj7: () => materials.set({ name: 'IFS', emissiveIntensity, emissive: emissiveColor }),
+      setMaterialObj8: () => materials.set({ name: 'Nacelle', emissiveIntensity, emissive: emissiveColor }),
 
       // Remove the highlight when the component becomes inactive
-      resetMaterialObj1: () => engine.setMaterialProperties({ obj: 'Fan', emissiveIntensity: 0 }),
-      resetMaterialObj2: () => engine.setMaterialProperties({ obj: 'Compressor', emissiveIntensity: 0 }),
-      resetMaterialObj3: () => engine.setMaterialProperties({ obj: 'Shaft', emissiveIntensity: 0 }),
-      resetMaterialObj4: () => engine.setMaterialProperties({ obj: 'CombChamb', emissiveIntensity: 0 }),
-      resetMaterialObj5: () => engine.setMaterialProperties({ obj: 'Turbine', emissiveIntensity: 0 }),
-      resetMaterialObj6: () => engine.setMaterialProperties({ obj: 'Nozzle', emissiveIntensity: 0 }),
-      resetMaterialObj7: () => engine.setMaterialProperties({ obj: 'IFS', emissiveIntensity: 0 }),
-      resetMaterialObj8: () => engine.setMaterialProperties({ obj: 'Nacelle', emissiveIntensity: 0 }),
+      resetMaterialObj1: () => materials.set({ name: 'Fan', emissiveIntensity: 0 }),
+      resetMaterialObj2: () => materials.set({ name: 'Compressor', emissiveIntensity: 0 }),
+      resetMaterialObj3: () => materials.set({ name: 'Shaft', emissiveIntensity: 0 }),
+      resetMaterialObj4: () => materials.set({ name: 'CombChamb', emissiveIntensity: 0 }),
+      resetMaterialObj5: () => materials.set({ name: 'Turbine', emissiveIntensity: 0 }),
+      resetMaterialObj6: () => materials.set({ name: 'Nozzle', emissiveIntensity: 0 }),
+      resetMaterialObj7: () => materials.set({ name: 'IFS', emissiveIntensity: 0 }),
+      resetMaterialObj8: () => materials.set({ name: 'Nacelle', emissiveIntensity: 0 }),
     },
     guards: {
       // Match 3D pointer and stepper events to the same component states
-      isObj1: ({ event }) => ('objName' in event && event.objName === 'FanLP') || ('stepName' in event && event.stepName === 'Obj1'),
-      isObj2: ({ event }) => ('objName' in event && event.objName === 'CompressorLP') || ('stepName' in event && event.stepName === 'Obj2'),
-      isObj3: ({ event }) => ('objName' in event && event.objName === 'ShaftLP') || ('stepName' in event && event.stepName === 'Obj3'),
-      isObj4: ({ event }) => ('objName' in event && event.objName === 'CombChambLP') || ('stepName' in event && event.stepName === 'Obj4'),
-      isObj5: ({ event }) => ('objName' in event && event.objName === 'TurbineLP') || ('stepName' in event && event.stepName === 'Obj5'),
-      isObj6: ({ event }) => ('objName' in event && event.objName === 'NozzleLP') || ('stepName' in event && event.stepName === 'Obj6'),
-      isObj7: ({ event }) => ('objName' in event && event.objName === 'IFSLP') || ('stepName' in event && event.stepName === 'Obj7'),
-      isObj8: ({ event }) => ('objName' in event && event.objName === 'NacelleLP') || ('stepName' in event && event.stepName === 'Obj8'),
+      isObj1: ({ event }) => ('objName' in event && event.objName === 'Fan') || ('stepName' in event && event.stepName === 'Obj1'),
+      isObj2: ({ event }) => ('objName' in event && event.objName === 'Compressor') || ('stepName' in event && event.stepName === 'Obj2'),
+      isObj3: ({ event }) => ('objName' in event && event.objName === 'Shaft') || ('stepName' in event && event.stepName === 'Obj3'),
+      isObj4: ({ event }) => ('objName' in event && event.objName === 'CombChamb') || ('stepName' in event && event.stepName === 'Obj4'),
+      isObj5: ({ event }) => ('objName' in event && event.objName === 'Turbine') || ('stepName' in event && event.stepName === 'Obj5'),
+      isObj6: ({ event }) => ('objName' in event && event.objName === 'Nozzle') || ('stepName' in event && event.stepName === 'Obj6'),
+      isObj7: ({ event }) => ('objName' in event && event.objName === 'IFS') || ('stepName' in event && event.stepName === 'Obj7'),
+      isObj8: ({ event }) => ('objName' in event && event.objName === 'Nacelle') || ('stepName' in event && event.stepName === 'Obj8'),
     },
   }).createMachine({
     id: 'App',
@@ -92,7 +83,7 @@ export function createStateMachine(app: App<typeof classes>): AnyStateMachine {
         on: {
           Scene_Ready: {
             target: 'ORBIT',
-            actions: ['enableOrbitCtrls', 'setColliders'],
+            actions: ['enableOrbitCtrls'],
           },
         },
       },
@@ -161,4 +152,4 @@ export function createStateMachine(app: App<typeof classes>): AnyStateMachine {
       },
     },
   });
-}
+};

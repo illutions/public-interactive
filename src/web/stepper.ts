@@ -1,8 +1,8 @@
-import { Comp } from 'illutions';
+import { Web } from 'illutions';
 
 import css from './style/stepper.css?inline';
 
-export class Stepper extends Comp {
+export class Stepper extends Web {
   private stepEntries: HTMLElement[] = [];
   private steps: HTMLElement[] = [];
 
