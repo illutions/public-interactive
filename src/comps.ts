@@ -1,4 +1,4 @@
-import { setComps, Clip, Collid3D, Mesh3D } from 'illutions';
+import { setComps, Clip, Collid3D, Mesh3D, Obj3D } from 'illutions';
 
 import { Stepper } from './web/stepper';
 import { Area } from './scene/area';
@@ -10,6 +10,10 @@ export const comps = setComps({
     rotation: { class: Clip, params: { gltf: true } },
   },
   scene: {
+    aim: {
+      class: Obj3D,
+      params: { gltf: true }
+    },
     area: {
       class: Area,
       params: { gltf: true }
